@@ -18,6 +18,11 @@ make build-run
 make br
 ```
 
+**Prepare Ansible**
+```bash
+make prepare
+```
+
 **Run Ansible**
 ```bash
 make play

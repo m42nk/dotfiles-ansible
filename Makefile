@@ -5,9 +5,12 @@ TARGET_DIR ?= /home/${TARGET_USER}/ansible
 play:
 	ansible-playbook --ask-become-pass bootstrap.yml
 
-br:
-	make build
-	make run
+play-debug:
+	ansible-playbook --ask-become-pass -vvv --diff bootstrap.yml
+
+prepare:
+	@echo "Prepare for ansible"
+	./prepare.sh
 
 build-run:
 	make build
@@ -18,7 +21,3 @@ build:
 
 run:
 	docker run --env TARGET_USER=${TARGET_USER} --env TARGET_DIR=${TARGET_DIR} --volume ${PWD}:${TARGET_DIR} --rm -it ${DOCKER_TAG}
-
-play-non-root:
-	ansible-playbook bootstrap.yml
-
