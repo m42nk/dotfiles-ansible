@@ -25,6 +25,11 @@
       tags:
         - curl
 
+    - name: install latest git | apt
+      apt_repository:
+        repo: ppa:git-core/ppa
+        state: present
+
     - name: install gh cli | apt
       become: true
       apt:
@@ -59,7 +64,7 @@
     - name: install node lts | asdf
       shell: source ~/.asdf/asdf.sh && asdf install nodejs lts
       retries: 3
-      delay: 3
+      delay: 1
       register: result
       until: result.rc == 0
       args:
@@ -136,18 +141,45 @@
       tags:
         - docker
 
-    - name: add neovim ppa | apt
-      apt_repository:
-        repo: ppa:nginx/stable
-        state: present
-      tags:
-        - neovim
+    # - name: install snap | apt
+    #   become: true
+    #   apt:
+    #     name: snapd
+    #     state: present
+    #   when: '"snapd" not in ansible_facts.packages'
+    #   environment:
+    #     SNAPCRAFT_SETUP_CORE: 1
+    #   tags:
+    #     - snap
+    #     - neovim
 
+    # - name: check snapd service | service
+    #   service:
+    #     name: snapd
+    #     state: started
+    #     enabled: true
+    #   environment:
+    #     SNAPCRAFT_SETUP_CORE: 1
+
+    # - name: install neovim | snap
+    #   become: true
+    #   snap:
+    #     name: nvim
+    #     classic: true
+    #     channel: latest/edge
+    #     state: present
+    #   environment:
+    #     SNAPCRAFT_SETUP_CORE: 1
+    #   tags:
+    #     - neovim
+
+    # TODO: this neovim is outdated, use ppa or snap instead
     - name: install neovim | apt
       become: true
       apt:
         name: neovim
         state: present
+      when: '"neovim" not in ansible_facts.packages'
       tags:
         - neovim
 
@@ -160,3 +192,5 @@
         track_submodules: true # get latest commit of submodules
       tags:
         - dotfiles
+
+# vim: filetype=yaml.ansible

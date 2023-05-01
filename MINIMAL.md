@@ -15,6 +15,7 @@
 
 ## Nice to have
 
+- Appimage
 - sudoers no passwd
 - fonts
 - SSH Keys
